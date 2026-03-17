@@ -1,13 +1,38 @@
-If you have already lost your way, this is the rest of the way.
+## If you have lost your way
 
-2. [ ] - docs/readme.md - Find your way back or forward if you lost track.
-3. [ ] - docs/overview.md - Hurray first overview idea of the landscape
-4. [ ] - docs/framework/readme.md - framework now
-5. [ ] - docs/framework/components x,y,z - details, this is getting hairy
-6. [ ] - Conjectures? - useful questions, let us see you think about them now.
-7. [ ] - works on conjectures - nothing prop, that I am keeping for myself, lets work through them though.
+If you are not quite sure where to go next, follow the reading path below.
 
-If your brain has already scriveled up into a pee-pee-nut.
-Here is the first page
+The intended route is to begin with the **general framework**, starting from the short overview.  
+Once that foundation is in place, you can move into whichever **conjecture** or research question seems most interesting to you.
 
-1. [ ] - Land here FQR readme.md - read the rest, your punie mind will hopefully understand something
+The rest of the path looks like this:
+
+1. [FQR frontpage README](../README.md)  
+   Start here for the high-level purpose of the repository and the intended reading order.
+
+2. [docs/README.md](README.md)  
+   You are here. Use this page as a navigation hub if you need to reorient yourself.
+
+3. [docs/overview.md](overview.md)  
+   A first overview of the landscape: the big picture, the main ideas, and how the pieces fit together.
+
+4. [docs/framework/README.md](framework/README.md)  
+   The framework itself: its structure, motivation, and main components.
+
+5. `docs/framework/components/...`  
+   The detailed parts of the framework, where the abstractions become more concrete.
+
+6. [docs/conjectures/README.md](conjectures/README.md)  
+   The main open questions and hypotheses that emerge from the framework.
+
+7. `conjectures/conjecture_X/...`  
+   More detailed work on specific conjectures, including intuition, formalism, experiments, and implementation.
+
+---
+
+If all of that already feels like a lot, start here:
+
+1. [FQR frontpage README](../README.md)  
+2. [Overview](overview.md)
+
+That is the simplest route back into the repo.
