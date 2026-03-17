@@ -95,3 +95,21 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 ├── notebooks/          # demos only (no core logic)
 ├── data/               # usually gitignored (see data/README.md)
 └── results/            # gitignored (outputs written here)
+
+
+
+
+
+README.md
+   ↓
+docs/overview.md
+   ↓
+docs/framework/
+   ↓
+docs/conjectures/
+   ↓
+conjectures/conjecture_X/
+   ↓
+papers/
+   ↓
+experiments/ + src/
