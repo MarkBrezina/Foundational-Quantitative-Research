@@ -96,20 +96,24 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 ├── data/               # usually gitignored (see data/README.md)
 └── results/            # gitignored (outputs written here)
 
-
+```
 
 
 
 README.md
    ↓
-docs/overview.md
+docs/overview.md -> hook, no equations, big ideas, why it matters, "this is interesting" -> no math
    ↓
-docs/framework/
+docs/framework/ -> understanding, assets.md, agents.md, rules.md, valuation.md, dynamics.md, 5-10 min read intuitive + structured, “This is well thought-out” -> no math
    ↓
-docs/conjectures/
+docs/conjectures/ -> introduce problems simply -> explain why they matter, 1-2 pages max, no heavy rotation - “This guy thinks like a researcher” -> no math
    ↓
-conjectures/conjecture_X/
+conjectures/conjecture_X/ -> proof of seriousness
+README.md   ← explanation + intuition
+math.md     ← formalism
+(optional) experiments.ipynb
    ↓
-papers/
+papers/ -> credibility
+Whitepapers, drafts, technical notes -> this is publishable-level work
    ↓
 experiments/ + src/
