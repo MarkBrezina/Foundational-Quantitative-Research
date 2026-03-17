@@ -46,7 +46,9 @@ It is built around a few central ideas:
   Parts of a larger long-term framework for modelling financial systems more coherently.
 
 This repository is the **foundation layer** for a broader markets research program: defining primitives, building reusable tooling, and studying questions across microstructure, execution, valuation, regimes, and market interaction.
+
 ---
+
 ## Why this repository exists
 
 The goal of this repository is to make it easier to:
@@ -163,7 +165,6 @@ papers/
    ↓
 experiments/ + src/
 ```
-
 *As taken from [TMRW Conjectures](https://tomorrowcapitalresearch.github.io/Conjectures.html)
 
 ## Repository layout
