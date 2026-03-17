@@ -50,6 +50,7 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 - Conjecture 2 — Central pricing
 - Conjecture 3 — Stealth / optimal distributions
 - Conjecture 4 — Full market model
+- Conjecture 5 - The Final Problem
 
 ---
 
