@@ -1,3 +1,14 @@
+
+
+superficial text about entire framework idea.
+- assets.md,
+- agents.md,
+- rules.md,
+- valuation.md,
+- dynamics.md
+
+
+
 # Overview
 
 ## What is this repository?
