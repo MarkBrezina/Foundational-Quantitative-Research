@@ -1,3 +1,15 @@
+Note: this repo isn't meant to showcase anything novel, interesting or proprietary. 
+It is just supposed to showcase the walkthrough of my research/thinking process.
+
+1. [ ] - Land here FQR readme.md
+2. docs/readme.md
+3. docs/overview.md
+4. docs/framework/readme.md
+5. docs/framework/components x,y,z
+6. Conjectures?
+
+
+
 # Foundational Quantitative Research (FQR)
 
 A research repository for a **framework-first** approach to financial markets:
