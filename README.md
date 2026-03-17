@@ -52,6 +52,8 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 - Conjecture 4 — Full market model
 - Conjecture 5 - The Final Problem
 
+*As taken from [TMRW Conjectures](https://tomorrowcapitalresearch.github.io/Conjectures.html)
+
 ---
 
 ## Repository layout
