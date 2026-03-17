@@ -1,72 +1,170 @@
-Note: this repo isn't meant to showcase anything novel, interesting or proprietary. 
-It is just supposed to showcase the walkthrough of my research/thinking process.
-
-1. [ ] - Land here FQR readme.md
-2. docs/readme.md
-3. docs/overview.md
-4. docs/framework/readme.md
-5. docs/framework/components x,y,z
-6. Conjectures?
-
-
-
 # Foundational Quantitative Research (FQR)
 
-A research repository for a **framework-first** approach to financial markets:
-- **Market structure as graphs** (assets/venues + agents)
-- **Layered valuation surfaces** (multiple “prices” evolving under rules)
-- **Simulation + empirical validation**
-- A set of open research problems (“conjectures”) with reproducible baselines
+> This repository documents a framework-first research approach to financial markets.  
+> It is not investment advice, not a trading signal repository, and not production execution infrastructure.
+> I, like anyone else underneath the sky, use AI, not for coding, thinking, or buidling. But for improving writing and understanding.
 
-> This is research software. It is **not** trading advice, and nothing here should be interpreted as a recommendation to buy/sell any asset.
+## Disclaimer
+
+This repository is **not** intended to showcase proprietary strategies, hidden alpha, or deployable trading systems.
+
+It exists for a different reason:
+
+- to document a long-running research process,
+- to make the underlying thinking visible,
+- to organise a conceptual framework for studying markets,
+- and to provide a foundation for further empirical and theoretical work.
+
+So, to be clear:
+
+- you will find **no proprietary alpha** here,
+- you will find **no production trading code** here,
+- and you will find **no “get rich quick” machinery** here.
+
+What you *will* find is a structured walkthrough of how I think about financial markets: their structure, dynamics, valuation, interactions, and the open problems that still seem worth taking seriously.
+
+---
+## What is this?
+
+**Foundational Quantitative Research (FQR)** is a research repository for a **framework-first** approach to financial markets.
+
+It is built around a few central ideas:
+
+- **Market structure as graphs**  
+  Assets, venues, flows, and agents represented as interacting structures rather than isolated time series.
+
+- **Layered valuation surfaces**  
+  Multiple notions of “price” evolving under different rules, frictions, and informational constraints.
+
+- **Simulation and empirical validation**  
+  A research process that moves back and forth between conceptual models, simulations, and real-world data.
+
+- **Conjectures as open research programs**  
+  A set of explicit problems, each paired with baseline implementations, metrics, and possible empirical tests.
+
+- **Foundational components for broader research**  
+  Parts of a larger long-term framework for modelling financial systems more coherently.
+
+This repository is the **foundation layer** for a broader markets research program: defining primitives, building reusable tooling, and studying questions across microstructure, execution, valuation, regimes, and market interaction.
+---
+## Why this repository exists
+
+The goal of this repository is to make it easier to:
+
+1. **run experiments end-to-end**,  
+2. **reproduce figures, results, and baselines**,  
+3. **iterate on open problems in a structured way**,  
+4. **document a coherent foundation for future work**,  
+5. **show that the ideas are not just vague abstractions, but researchable objects**.
+
+This is, above all, a research repository.
+
+It is meant to show the *walkthrough of the thinking*.
 
 ---
 
-## What this repo is
+## What you will find here
 
-This repository is the “foundation layer” for a broader markets research program: defining primitives, building a reusable simulation engine, and running empirical studies (correlations, venues, regimes, microstructure).
+The repository is organised around three broad layers:
 
-The goal is to make it easy to:
-1) **Run experiments end-to-end**,  
-2) **Reproduce plots/results**, and  
-3) **Iterate on open problems** via testable baselines.
+### 1. Framework
+The conceptual and structural lens used to think about markets:
+- assets, venues, and agents,
+- rules and interactions,
+- valuation and dynamics,
+- abstractions that connect market behaviour across scales.
 
-If you’re looking for: *one-off notebooks*, *a trading bot*, or *production execution code*, this is not that repo.
+### 2. Empirical studies
+Reproducible experiments on real or simulated data:
+- cross-asset and cross-venue relationships,
+- structural breaks and market regimes,
+- flow, volatility, and impact proxies,
+- validation of proposed mechanisms.
+
+### 3. Conjectures
+Open research problems treated as **mini research programs**:
+- clearly stated ideas,
+- motivation for why they matter,
+- baseline implementations,
+- metrics and falsifiable criteria,
+- links to experiments, notes, and formal writeups.
 
 ---
 
-## Research tracks
+## Recommended reading path
 
-### 1) Framework simulations
-A minimal but extensible simulator that supports:
-- Market graph construction (assets/venues)
-- Agent populations + policies
-- A rule hierarchy (invariants → stochastic dynamics → interactions)
-- Time evolution + metrics
+This repository is designed to be read in layers.
 
-### 2) Empirical studies
-Reproducible experiments on real data:
-- Cross-asset and cross-venue correlation networks
-- Structural breaks and regime clustering
-- Flow/vol/impact proxies and validation tests
+If you want the intended path, follow this order:
 
-### 3) Conjectures (open problems)
-Each conjecture is treated as a **mini research program**:
-- A clear statement
-- A baseline implementation
-- Metrics and falsifiable criteria
-- Reproduction steps
+### Step 1 — Start here
+Read this frontpage first:
 
-Current set (see `/docs/conjectures/` and `/conjectures/`):
-- Conjecture 1 — Path switching
-- Conjecture 2 — Central pricing
-- Conjecture 3 — Stealth / optimal distributions
-- Conjecture 4 — Full market model
-- Conjecture 5 - The Final Problem
+- [`README.md`](README.md)
+
+This should give you the high-level picture: what the repo is, what it is not, and how to navigate it.
+
+### Step 2 — Get the map
+Then go to:
+
+- [`docs/overview.md`](docs/overview.md)
+
+This is the broad overview of the landscape.  
+Big ideas first. Minimal technical overhead.
+
+### Step 3 — Read the framework
+Then continue to:
+
+- [`docs/framework/README.md`](docs/framework/README.md)
+
+This is where the architecture of the framework starts becoming concrete.
+
+From there, move into the components:
+
+- `docs/framework/assets.md`
+- `docs/framework/agents.md`
+- `docs/framework/rules.md`
+- `docs/framework/valuation.md`
+- `docs/framework/dynamics.md`
+
+### Step 4 — Read the conjectures
+Once the framework makes sense, continue to:
+
+- [`docs/conjectures/README.md`](docs/conjectures/README.md)
+
+This introduces the open problems and explains why they matter.
+
+### Step 5 — Go deeper where needed
+For each conjecture or topic, move into the dedicated folders for more serious detail:
+
+- `conjectures/conjecture_X/README.md` for intuition and structure
+- `math.md` for formalism
+- notebooks or experiments for concrete work
+- `papers/` for longer-form writeups and technical drafts
+
+---
+
+## Reading philosophy
+
+A rough guide to the repo is:
+
+```
+README.md
+   ↓
+docs/overview.md
+   ↓
+docs/framework/
+   ↓
+docs/conjectures/
+   ↓
+conjectures/conjecture_X/
+   ↓
+papers/
+   ↓
+experiments/ + src/
+```
 
 *As taken from [TMRW Conjectures](https://tomorrowcapitalresearch.github.io/Conjectures.html)
-
----
 
 ## Repository layout
 
@@ -110,23 +208,3 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 
 ```
 
-
-```
-README.md
-   ↓
-docs/overview.md -> hook, no equations, big ideas, why it matters, "this is interesting" -> no math
-   ↓
-docs/framework/ -> understanding, assets.md, agents.md, rules.md, valuation.md, dynamics.md, 5-10 min read intuitive + structured, “This is well thought-out” -> no math
-   ↓
-docs/conjectures/ -> introduce problems simply -> explain why they matter, 1-2 pages max, no heavy rotation - “This guy thinks like a researcher” -> no math
-   ↓
-conjectures/conjecture_X/ -> proof of seriousness
-README.md   ← explanation + intuition
-math.md     ← formalism
-(optional) experiments.ipynb
-   ↓
-papers/ -> credibility
-Whitepapers, drafts, technical notes -> this is publishable-level work
-   ↓
-experiments/ + src/
-```
