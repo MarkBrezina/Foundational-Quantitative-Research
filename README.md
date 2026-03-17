@@ -99,7 +99,7 @@ Current set (see `/docs/conjectures/` and `/conjectures/`):
 ```
 
 
-
+```
 README.md
    ↓
 docs/overview.md -> hook, no equations, big ideas, why it matters, "this is interesting" -> no math
@@ -117,3 +117,4 @@ papers/ -> credibility
 Whitepapers, drafts, technical notes -> this is publishable-level work
    ↓
 experiments/ + src/
+```
