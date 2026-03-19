@@ -1,9 +1,3 @@
-This should lead readers into reading about. \
-assets.md, agents.md, rules.md, valuation.md, dynamics.md \
-Which in turn should lead readers into reading about conjectures. \
-
-
-
 # Framework
 
 ## Overview
