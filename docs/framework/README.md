@@ -2,14 +2,18 @@
 
 ## Overview
 
-The Foundational Quantitative Research (FQR) framework models financial markets as a **multi-layer, graph-based dynamical system**.
+Financial markets as a **multi-layered dynamical system**.
 
 At each time step, the system evolves through interactions between:
 
-1. **Assets and Markets (structure)**
-2. **Agents (decision-makers)**
-3. **Rules (constraints and dynamics)**
-4. **Valuation Layers (state of the system)**
+1. Fundamentally **Assets and Markets (structure)** as visualised/represented by a first a graph network over markets, with components being assets in those markets.
+Markets are thought of *simply* as exchanges, with say stocks being traded, bonds or forex.
+
+2. **Agents (decision-makers)** as traders, institutions, market-makers and so on. Each agent has a breadth of actions available to them, each onto the assets and markets represented below.
+
+3. **Rules (constraints and dynamics)** To the common financially literate individual this is obvious, rules may be "opening hours", they may be market psychology, they may be statistical in nature. We do not intend to seem as if we understand all of them or believe our selves to be all knowing. This will indeed be the main part of our research further on.
+
+4. **Valuation Layers (state of the system)** - This is where all of the aggregations of the previous layers show up as the "price movement" or "price position" of assets and this is what we will in the end see on the stock market price.
 
 ---
 
