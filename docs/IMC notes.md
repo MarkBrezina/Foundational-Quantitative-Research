@@ -1,5 +1,3 @@
-Here is a cleaned-up version that keeps your ideas but makes the structure and wording much clearer:
-
 ## Products
 
 ### Stable product
@@ -14,8 +12,8 @@ The simplest approach is to buy below fair value and sell above fair value.
 
 Typical quotes:
 
-* buy at **9999**
-* sell at **10001**
+* buy at **9993** - best bid + 1
+* sell at **10007** - best ask - 1
 
 This is essentially a pure market-making setup.
 
