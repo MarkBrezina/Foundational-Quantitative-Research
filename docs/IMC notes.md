@@ -216,62 +216,302 @@ If you want, I can also turn this into a much tighter **repo-style summary** wit
 
 
 ---
+# Trading system architecture
 
-# The setup
+## Product States
 
-## Product states
-Add the basic features
+Each product maintains its own state, which acts as the central source of truth for market information and derived features.
+
+### Core responsibilities
+- Read raw market data (order book)
+- Compute derived features
+- Maintain rolling history
+
+### Stored information
+- Best bid / ask
+- Mid price
+- Spread
+- Fair value
+- Returns
+- Volatility
+- Trend (multi-horizon)
+- Mean reversion distance
+- Order imbalance
+- Rolling price / return / volume history
+- and more
+
+
+### Role in system
+
+ProductState is **purely informational**:
+- No trading decisions
+- No risk decisions
+- Only transforms raw data → structured signals
 
 ## Strategies
-We will have basic strategy setups
 
-1. MarketMaking - which should in its simplicity take in the current best bid and best ask and post orders at 1 step further in.
-   in this way we would want to earn the spread.
-   
-2. ValueArbitrage - If bid or ask crosses the mid_price, we want to match and reverse on the next timestep.
-   Say bid = mid_price + 1, than we want to sell into it and buy back on the next timesteps when the bid price goes back to mid_price - k.
-   Opposite for ask, if ask = mid_price - 1, we want to buy into it and sell back on the next timesteps until we sell at mid_price + k.
-   
-3. Mean reversion
-   
-7. TrendStrategy
+Strategies operate on ProductState and produce **QuoteIntent** (or later, target inventory).
 
-## Inventory
-hold the current soft limits, hard limits, position and inventory considerations.
-skew inventory as we approach or reach limits.
+Each strategy represents a distinct source of alpha.
 
-## Risk
-when queued in the main loop.
-consider previous var, Cvar, volatility, along with whether the current trend is going to be stable, or whether the current mean reversion is due to move adversely.
+### General principle
 
-Run simulations to consider which way the mid_price will go, if the price continues in the same direction.
+Strategies:
 
-when prompted return a judgemetn on inventory, consider whether current inventory positions along with risk metrics like current var, cvar, volatility and simulation is too much for new orders or whether additional inventory could be taken on. If risk is too much, return adjustments negative for flattening and positive if more inventory is okay.
+- Do not consider hard limits
+- Do not enforce risk constraints
+- Express desired behaviour, not final execution
 
-## Trader setup
-### On initialising setup:
-for each product in product class.
-load in from PARAMs, set hard_positions limits, soft_position_limits, initial fair value.
-Load up the product states
-With hard position limits, soft position limits and products states set up the inventory and risk systems.
-For each product load in the associated strategies, defined as.
+## 1. Market Making
 
-self.strategies: Dict[str, List[BaseStrategy]] = {
-    Product.A: [MarketMaking, MeanReversionStrategy()],
-    Product.B: [MarketMaking, TrendStrategy(), MeanReversionStrategy()],
+A simple spread-capturing strategy.
+
+**Logic** 
+- Read current best bid / best ask
+- Post:
+   - bid slightly above best bid
+   - ask slightly below best ask
+- If spread is too tight, revert to quoting around fair value
+
+**Objective**
+
+Earn the spread consistently through passive liquidity provision.
+
+## 2. Value Arbitrage
+
+A fair-value crossing strategy.
+
+**Logic**
+- If **bid > fair value** → sell into it
+- If **ask < fair value** → buy into it
+- Position is expected to unwind as price returns to fair value
+**Behaviour**
+- Aggressive (taker)
+- Short holding period
+- Relies on immediate correction or microstructure inefficiency
+
+## 3. Mean Reversion
+
+A distance-from-equilibrium strategy.
+
+### Logic
+- Define equilibrium (fair value or smoothed price)
+- Compute distance:
+   - Negative distance → price too low → buy
+   - Positive distance → price too high → sell
+
+### Behaviour
+- Builds inventory gradually when far from equilibrium
+- Reduces or reverses near equilibrium
+- Works best in oscillatory or range-bound regimes
+
+## 4. Trend Strategy
+
+A directional inventory strategy.
+
+### Logic
+Compute trend (multi-window or weighted)
+- If trend is positive → accumulate long inventory
+- If trend is negative → accumulate short inventory
+- If trend weakens toward zero → reduce exposure
+### Behaviour
+- Persistent directional bias
+- Inventory-driven rather than quote-driven
+- Should unwind when signal weakens
+### Strategy Outputs
+
+All strategies return QuoteIntent:
+- desired bid / ask
+- desired size
+- source / weight
+
+Later evolution:
+- Trend + Mean Reversion may instead return target inventory
+- 
+## Inventory System
+
+The inventory system manages **position constraints and skewing.**
+
+### Responsibilities
+- Track current position
+- Enforce:
+  - hard limits (absolute cap)
+   - soft limits (early warning)
+- Compute inventory skew
+- Adjust quotes based on exposure
+
+### Behaviour
+- As inventory increases:
+   - reduce same-side quoting
+   - encourage opposite-side trades
+- Near limits:
+   - suppress risk-increasing orders
+
+### Role in system
+Inventory is a **shaping layer**, not an alpha source:
+- modifies strategy output
+- does not generate independent signals
+
+## Risk System
+
+The risk system evaluates whether current and proposed positions are acceptable.
+
+### Inputs
+- Current position
+- Volatility
+- Trend
+- Mean reversion signal
+- Simulated price paths
+
+### Metrics
+- Probability of loss
+- VaR / CVaR
+- Expected PnL
+- Adverse move probability
+
+### Logic
+- Simulate forward price paths
+- Evaluate inventory under those scenarios
+- Determine whether:
+   - risk is acceptable
+   - exposure should be reduced
+   - new inventory can be added
+
+### Outputs
+- RiskReport containing:
+   - limits
+   - probabilities
+   - recommended action
+
+### Behaviour
+- If risk is high:
+   - suppress new orders
+   - bias toward flattening
+- If risk is acceptable:
+   - allow strategy + inventory adjusted quotes
+
+### Role in system
+
+Risk acts as a **final gatekeeper**:
+- can override all strategies
+- can force flattening
+
+## Strategy Aggregation
+
+Multiple strategies may generate quotes simultaneously.
+
+### Combination logic
+- Bid = most aggressive (highest)
+- Ask = most aggressive (lowest)
+- Sizes = aggregated or weighted
+
+### Purpose
+- Merge multiple alpha sources into a single executable intent
+
+## Trader Setup
+### On initialization
+
+For each product:
+
+1. Load parameters from *PARAMS*
+   - hard limits
+   - soft limits
+   - initial fair value
+   - strategy parameters
+2. Create *ProductState*
+3. Initialize systems:
+   - *InventorySystem*
+   - *RiskSystem*
+5. Assign strategies per product:
+```
+self.strategies = {
+    Product.A: [MarketMaking, MeanReversionStrategy(), ValueArbitrageStrategy()],
+    Product.B: [MarketMaking, TrendStrategy(), MeanReversionStrategy(), ValueArbitrageStrategy()],
 }
+```
 
-### whenever triggered by the Trader.run(state: TradingState) function.
-Do as follows
-1. Load in the external tradingstate, which holds order_depths and such.
+## Trader.run(state)
 
-2. update product states
-3. product state -> update risk state
-   If risk state is severe Skip the next parts and close positions.
-4. product state -> update strategy states
-5. From the strategy states, along with the risk and inventory states, deduce the next orders to quote.
-6. If the risk state is not severe, take the risk and inventory adjusted strategy quotes and execute them through
-   maker, taker, closer executions.
-7. update inventory positions, and write memory out as needed.
+This is the central execution loop.
+
+## Per product:
+### 1. Load market state
+- Read order_depth
+- Update ProductState
+### 2. Update features
+- Compute trend, volatility, MR signals, etc.
+### 3. Evaluate risk
+- Generate RiskReport
+### 4. Severe risk check
+If risk is severe:
+- skip strategy execution
+- generate flattening / reducing quotes only
+
+### 5. Generate strategy quotes
+- Each strategy produces a QuoteIntent
+### 6. Combine strategy outputs
+- Aggregate into a single intent
+### 7. Apply inventory shaping
+- skew quotes
+- adjust sizes
+### 8. Apply risk approval
+- suppress unsafe orders
+- enforce limits
+### 9. Execute
+- convert approved quotes into orders
+- send to exchange
+### 10. Update memory
+- persist product states
+- persist inventory / PnL tracking
 
 
+
+## System Flow Summary
+```
+Market Data
+   ↓
+ProductState (features)
+   ↓
+Strategies (alpha signals)
+   ↓
+Strategy Aggregation
+   ↓
+Inventory System (position shaping)
+   ↓
+Risk System (approval / suppression)
+   ↓
+Order Builder
+   ↓
+Execution
+```
+
+## Key Design Principles
+### 1. Separation of concerns
+- ProductState → data
+- Strategies → alpha
+- Inventory → constraints
+- Risk → safety
+
+### 2. Strategies do not manage risk
+They express intent only.
+
+### 3. Risk can override everything
+Final authority on whether orders are allowed.
+
+### 4. Inventory shapes, not decides
+It modifies behaviour but does not generate alpha.
+
+### 5. Multi-layer architecture
+- micro (order book)
+- meso (strategy)
+- macro (risk + inventory)
+
+
+## Future Improvements
+- Convert Trend / Mean Reversion to **target inventory framework**
+- Add regime detection (trend vs mean-reverting state)
+- Improve simulation (non-GBM, order flow driven)
+- Add execution layer:
+   - maker vs taker logic
+   - stealth execution
+   - queue priority optimisation
