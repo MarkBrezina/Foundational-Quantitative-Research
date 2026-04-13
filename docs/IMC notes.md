@@ -209,3 +209,69 @@ Once a robust fair-value estimate has been chosen, the execution logic for a pro
 Because Kelp’s spread is typically tighter than Resin’s, the total profit opportunity is smaller. That means fair-value estimation matters more, and there is less room for poor quoting decisions.
 
 If you want, I can also turn this into a much tighter **repo-style summary** with cleaner headings and less repetition.
+
+
+
+
+
+
+---
+
+# The setup
+
+## Product states
+Add the basic features
+
+## Strategies
+We will have basic strategy setups
+
+1. MarketMaking - which should in its simplicity take in the current best bid and best ask and post orders at 1 step further in.
+   in this way we would want to earn the spread.
+   
+2. ValueArbitrage - If bid or ask crosses the mid_price, we want to match and reverse on the next timestep.
+   Say bid = mid_price + 1, than we want to sell into it and buy back on the next timesteps when the bid price goes back to mid_price - k.
+   Opposite for ask, if ask = mid_price - 1, we want to buy into it and sell back on the next timesteps until we sell at mid_price + k.
+   
+3. Mean reversion
+   
+7. TrendStrategy
+
+## Inventory
+hold the current soft limits, hard limits, position and inventory considerations.
+skew inventory as we approach or reach limits.
+
+## Risk
+when queued in the main loop.
+consider previous var, Cvar, volatility, along with whether the current trend is going to be stable, or whether the current mean reversion is due to move adversely.
+
+Run simulations to consider which way the mid_price will go, if the price continues in the same direction.
+
+when prompted return a judgemetn on inventory, consider whether current inventory positions along with risk metrics like current var, cvar, volatility and simulation is too much for new orders or whether additional inventory could be taken on. If risk is too much, return adjustments negative for flattening and positive if more inventory is okay.
+
+## Trader setup
+### On initialising setup:
+for each product in product class.
+load in from PARAMs, set hard_positions limits, soft_position_limits, initial fair value.
+Load up the product states
+With hard position limits, soft position limits and products states set up the inventory and risk systems.
+For each product load in the associated strategies, defined as.
+
+self.strategies: Dict[str, List[BaseStrategy]] = {
+    Product.A: [MarketMaking, MeanReversionStrategy()],
+    Product.B: [MarketMaking, TrendStrategy(), MeanReversionStrategy()],
+}
+
+### whenever triggered by the Trader.run(state: TradingState) function.
+Do as follows
+1. Load in the external tradingstate, which holds order_depths and such.
+
+2. update product states
+3. product state -> update risk state
+   If risk state is severe Skip the next parts and close positions.
+4. product state -> update strategy states
+5. From the strategy states, along with the risk and inventory states, deduce the next orders to quote.
+6. If the risk state is not severe, take the risk and inventory adjusted strategy quotes and execute them through
+   maker, taker, closer executions.
+7. update inventory positions, and write memory out as needed.
+
+
